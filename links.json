@@ -2,25 +2,25 @@
   {
     "href": "/mapel-asj",
     "title": "Administrasi Sistem Jaringan Kelas 11",
-    "tag": "Materi ASJ",
+    "guru": "Pak Budi",
     "color": "indigo"
   },
   {
     "href": "/mapel-mtk",
     "title": "Matematika Kelas 12",
-    "tag": "Matematika",
+    "guru": "Bu Rina",
     "color": "blue"
   },
   {
     "href": "/mapel-pai",
     "title": "PAI Kelas 11",
-    "tag": "PAI",
+    "guru": "Ustadzah Siti",
     "color": "green"
   },
   {
     "href": "/cv",
     "title": "CV Skahida",
-    "tag": "CV Skahida",
+    "guru": "Admin",
     "color": "pink"
   }
 ]
