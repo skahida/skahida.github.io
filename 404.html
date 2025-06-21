@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+</head>
+<body>
+  <script>
+    const slug = window.location.pathname.replace(/^\/|\/$/g, '');
+
+    fetch('/links.json')
+      .then(response => response.json())
+      .then(links => {
+        if (links[slug]) {
+          window.location.href = links[slug];
+        } else {
+          document.body.innerHTML = `<h2>Link "${slug}" tidak ditemukan.</h2>`;
+        }
+      })
+      .catch(err => {
+        document.body.innerHTML = "<h2>Gagal memuat data link</h2>";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
