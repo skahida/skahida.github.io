@@ -42,6 +42,11 @@
         <!-- Tambahkan lebih banyak link di sini -->
       </div>
 
+      <!-- Not Found Message -->
+      <div id="notFound" class="text-center text-gray-500 mt-6 hidden">
+        <p class="text-sm">🔍 Tidak ditemukan link yang sesuai.</p>
+      </div>
+
       <!-- Footer -->
       <div class="mt-10 text-center text-sm text-gray-500">
         <p class="mt-4 text-xs">&copy; 2025 Skahida.io — Dikelola oleh Skahida Codeworks</p>
@@ -52,13 +57,20 @@
     <script>
       const searchInput = document.getElementById('searchInput');
       const linkCards = document.querySelectorAll('.link-card');
+      const notFound = document.getElementById('notFound');
 
       searchInput.addEventListener('input', function () {
         const keyword = this.value.toLowerCase();
+        let visibleCount = 0;
+
         linkCards.forEach(card => {
           const title = card.getAttribute('data-title').toLowerCase();
-          card.style.display = title.includes(keyword) ? 'flex' : 'none';
+          const isMatch = title.includes(keyword);
+          card.style.display = isMatch ? 'flex' : 'none';
+          if (isMatch) visibleCount++;
         });
+
+        notFound.classList.toggle('hidden', visibleCount > 0);
       });
     </script>
   </body>
