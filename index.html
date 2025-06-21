@@ -5,18 +5,13 @@
     <title>Skahida Shortlink</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="icon"
-      href="https://cdn-icons-png.flaticon.com/512/4248/4248443.png"
-    />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" />
   </head>
   <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center px-4">
     <div class="max-w-screen-lg w-full">
       <div class="text-center mb-6">
         <h1 class="text-4xl font-bold text-indigo-700">📚 Skahida Shortlink</h1>
-        <h3 class="text-base font-semibold text-gray-500 mt-1">
-          Akun Resmi Shortlink SMK NU Al Hidayah
-        </h3>
+        <h3 class="text-base font-semibold text-gray-500 mt-1">Akun Resmi Shortlink SMK NU Al Hidayah</h3>
         <p class="text-gray-600 mt-2 mb-4">Pilih salah satu link berikut:</p>
 
         <!-- 🔍 Input Pencarian -->
@@ -45,9 +40,7 @@
 
       <!-- Footer -->
       <div class="mt-10 text-center text-sm text-gray-500">
-        <p class="mt-4 text-xs">
-          &copy; 2025 Skahida.io — Dikelola oleh Skahida Codeworks
-        </p>
+        <p class="mt-4 text-xs">&copy; 2025 Skahida.io — Dikelola oleh Skahida Codeworks</p>
       </div>
     </div>
 
@@ -65,12 +58,24 @@
         data.forEach((link) => {
           const card = document.createElement("a");
           card.href = link.href;
-          card.setAttribute("data-title", link.tag);
-          card.className = `link-card bg-white hover:bg-${link.color}-50 border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition`;
+          card.setAttribute("data-title", link.title);
+          
+          // Gunakan map warna agar Tailwind mengenali warna
+          const colorMap = {
+            indigo: ["bg-indigo-50", "text-indigo-700"],
+            blue: ["bg-blue-50", "text-blue-700"],
+            green: ["bg-green-50", "text-green-700"],
+            pink: ["bg-pink-50", "text-pink-700"],
+            red: ["bg-red-50", "text-red-700"],
+            yellow: ["bg-yellow-50", "text-yellow-700"],
+            gray: ["bg-gray-50", "text-gray-700"]
+          };
 
-          card.innerHTML = `
-            <span class="mt-2 font-medium text-sm text-${link.color}-700">${link.title}</span>
-          `;
+          const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
+
+          card.className = `link-card ${bgColor} border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition`;
+
+          card.innerHTML = `<span class="mt-2 font-medium text-sm ${textColor}">${link.title}</span>`;
 
           linkContainer.appendChild(card);
         });
@@ -84,16 +89,15 @@
           renderLinks(allLinks);
         })
         .catch((err) => {
-          linkContainer.innerHTML =
-            '<p class="text-sm text-red-500 text-center">Gagal memuat link.</p>';
+          linkContainer.innerHTML = '<p class="text-sm text-red-500 text-center">Gagal memuat link.</p>';
           console.error(err);
         });
 
-      // Pencarian
+      // Pencarian berdasarkan title
       searchInput.addEventListener("input", function () {
         const keyword = this.value.toLowerCase();
         const filtered = allLinks.filter((link) =>
-          link.tag.toLowerCase().includes(keyword)
+          link.title.toLowerCase().includes(keyword)
         );
         renderLinks(filtered);
         notFound.classList.toggle("hidden", filtered.length > 0);
