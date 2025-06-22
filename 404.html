@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Mengalihkan...</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-  <p style="text-align:center; padding-top: 50px;">🔁 Sedang mengalihkan, mohon tunggu...</p>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>
-    const path = window.location.pathname.replace(/^\/|\/$/g, '');
+    // Ambil path dari URL saat ini
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+
+    // Load links.json dan cari yang cocok
     fetch('/links.json')
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
-        const match = data.find(item => item.custom === path);
-        if (match) {
-          window.location.href = match.href;
+        const found = data.find(item => item.custom === path);
+        if (found) {
+          window.location.href = found.href;
         } else {
-          document.body.innerHTML = '<h2 style="text-align:center; color:gray; padding-top:50px;">🔍 Shortlink tidak ditemukan.</h2>';
+          document.body.innerHTML = '<h1 style="text-align:center; margin-top: 20vh;">🔍 Halaman tidak ditemukan</h1>';
         }
       })
       .catch(() => {
-        document.body.innerHTML = '<h2 style="text-align:center; color:red; padding-top:50px;">Gagal memuat link.</h2>';
+        document.body.innerHTML = '<h1 style="text-align:center; margin-top: 20vh;">⚠️ Gagal memuat data link</h1>';
       });
   </script>
+</head>
+<body>
 </body>
 </html>

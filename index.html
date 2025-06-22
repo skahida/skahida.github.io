@@ -7,9 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" />
 </head>
-<body class="bg-gradient-to-br from-indigo-50 to-white text-gray-800 min-h-screen flex items-center justify-center px-4">
-
-  <div class="max-w-screen-lg w-full">
+<body class="bg-gradient-to-br from-indigo-50 to-white text-gray-800 min-h-screen px-4 py-8">
+  <div class="max-w-screen-lg mx-auto">
     <div class="text-center mb-8">
       <h1 class="text-4xl font-bold text-indigo-700">📚 Skahida Shortlink</h1>
       <h3 class="text-base font-semibold text-gray-500 mt-1">Akun Resmi Shortlink SMK NU Al Hidayah</h3>
@@ -26,12 +25,12 @@
       </div>
     </div>
 
-    <!-- Grid Link Cards -->
-    <div id="linkContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <!-- Link akan dimuat dari links.json -->
+    <!-- Container Kelompok Kelas -->
+    <div id="kelasContainer" class="space-y-10">
+      <!-- Akan terisi dari JS -->
     </div>
 
-    <!-- Not Found Message -->
+    <!-- Not Found -->
     <div id="notFound" class="text-center text-gray-500 mt-6 hidden">
       <p class="text-sm">🔍 Tidak ditemukan link yang sesuai.</p>
     </div>
@@ -42,13 +41,10 @@
     </div>
   </div>
 
-  <!-- 🔍 Script -->
   <script>
     const searchInput = document.getElementById("searchInput");
-    const linkContainer = document.getElementById("linkContainer");
+    const kelasContainer = document.getElementById("kelasContainer");
     const notFound = document.getElementById("notFound");
-
-    let allLinks = [];
 
     const colorMap = {
       indigo: ["bg-indigo-50", "text-indigo-700"],
@@ -60,45 +56,69 @@
       gray: ["bg-gray-50", "text-gray-700"]
     };
 
-    function renderLinks(data) {
-      linkContainer.innerHTML = "";
-      data.forEach((link) => {
-        const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
-        const card = document.createElement("a");
+    let allLinks = [];
 
-        // Ubah href ke custom shortlink
-        card.href = `/${link.custom}`;
-        card.setAttribute("data-title", link.title);
-        card.className = `link-card ${bgColor} border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition hover:shadow-md`;
+    function renderGroupedLinks(data) {
+      kelasContainer.innerHTML = "";
 
-        card.innerHTML = `
-          <span class="text-2xl mb-1">📘</span>
-          <span class="font-semibold text-sm ${textColor} leading-tight text-center">${link.title}</span>
-          <span class="text-xs text-gray-500 mt-1">👤 ${link.guru}</span>
-        `;
+      const grouped = data.reduce((acc, item) => {
+        (acc[item.kelas] = acc[item.kelas] || []).push(item);
+        return acc;
+      }, {});
 
-        linkContainer.appendChild(card);
+      const sortedKelas = Object.keys(grouped).sort();
+
+      sortedKelas.forEach(kelas => {
+        const section = document.createElement("div");
+
+        const title = document.createElement("h2");
+        title.className = "text-lg font-bold text-gray-700 mb-4 border-b pb-1";
+        title.textContent = `🧾 Kelas ${kelas}`;
+
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4";
+
+        grouped[kelas].forEach(link => {
+          const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
+          const card = document.createElement("a");
+          card.href = link.href;
+          card.setAttribute("data-title", link.title);
+          card.className = `link-card ${bgColor} border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition hover:shadow-md`;
+
+          card.innerHTML = `
+            <span class="text-2xl mb-1">📘</span>
+            <span class="font-semibold text-sm ${textColor} leading-tight text-center">${link.title}</span>
+            <span class="text-xs text-gray-500 mt-1">👤 ${link.guru}</span>
+          `;
+          grid.appendChild(card);
+        });
+
+        section.appendChild(title);
+        section.appendChild(grid);
+        kelasContainer.appendChild(section);
       });
     }
 
+    // Fetch JSON
     fetch("links.json")
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         allLinks = data;
-        renderLinks(allLinks);
+        renderGroupedLinks(allLinks);
       })
-      .catch((err) => {
-        linkContainer.innerHTML = '<p class="text-sm text-red-500 text-center">Gagal memuat link.</p>';
+      .catch(err => {
+        kelasContainer.innerHTML = '<p class="text-sm text-red-500 text-center">Gagal memuat link.</p>';
         console.error(err);
       });
 
+    // Pencarian
     searchInput.addEventListener("input", function () {
       const keyword = this.value.toLowerCase();
-      const filtered = allLinks.filter((link) =>
+      const filtered = allLinks.filter(link =>
         link.title.toLowerCase().includes(keyword) ||
         link.guru.toLowerCase().includes(keyword)
       );
-      renderLinks(filtered);
+      renderGroupedLinks(filtered);
       notFound.classList.toggle("hidden", filtered.length > 0);
     });
   </script>

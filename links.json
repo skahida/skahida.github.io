@@ -2,17 +2,37 @@
   {
     "custom": "mapel-asj",
     "href": "https://drive.google.com/file/d/xyz/view?usp=sharing",
-    "title": "Modul Jaringan Kelas 11",
+    "title": "Modul ASJ",
     "guru": "Pak Budi",
     "color": "indigo",
-    "kategori": "RPL"
+    "kategori": "RPL",
+    "kelas": "10"
+  },
+  {
+    "custom": "mapel-asj",
+    "href": "https://drive.google.com/file/d/xyz/view?usp=sharing",
+    "title": "Modul PAI",
+    "guru": "Pak Budi",
+    "color": "indigo",
+    "kategori": "RPL",
+    "kelas": "10"
+  },
+  {
+    "custom": "mapel-asj",
+    "href": "https://drive.google.com/file/d/xyz/view?usp=sharing",
+    "title": "Modul Jaringan",
+    "guru": "Pak Budi",
+    "color": "indigo",
+    "kategori": "RPL",
+    "kelas": "11"
   },
   {
     "custom": "mapel-mtk",
     "href": "https://drive.google.com/file/d/abc/view?usp=sharing",
-    "title": "Matematika Kelas 12",
+    "title": "Matematika",
     "guru": "Bu Rina",
     "color": "blue",
-    "kategori": "Umum"
+    "kategori": "Umum",
+    "kelas": "12"
   }
 ]
