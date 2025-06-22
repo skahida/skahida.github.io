@@ -81,7 +81,9 @@
         grouped[kelas].forEach(link => {
           const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
           const card = document.createElement("a");
-          card.href = link.href;
+
+          // Pakai link custom, bukan href langsung
+          card.href = '/' + link.custom;
           card.setAttribute("data-title", link.title);
           card.className = `link-card ${bgColor} border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition hover:shadow-md`;
 
