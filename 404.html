@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <title>Mengalihkan...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+  <p style="text-align:center; padding-top: 50px;">🔁 Sedang mengalihkan, mohon tunggu...</p>
   <script>
-    const slug = window.location.pathname.replace(/^\/|\/$/g, '');
-
+    const path = window.location.pathname.replace(/^\/|\/$/g, '');
     fetch('/links.json')
-      .then(response => response.json())
-      .then(links => {
-        if (links[slug]) {
-          window.location.href = links[slug];
+      .then(res => res.json())
+      .then(data => {
+        const match = data.find(item => item.custom === path);
+        if (match) {
+          window.location.href = match.href;
         } else {
-          document.body.innerHTML = `<h2>Link "${slug}" tidak ditemukan.</h2>`;
+          document.body.innerHTML = '<h2 style="text-align:center; color:gray; padding-top:50px;">🔍 Shortlink tidak ditemukan.</h2>';
         }
       })
-      .catch(err => {
-        document.body.innerHTML = "<h2>Gagal memuat data link</h2>";
-        console.error(err);
+      .catch(() => {
+        document.body.innerHTML = '<h2 style="text-align:center; color:red; padding-top:50px;">Gagal memuat link.</h2>';
       });
   </script>
 </body>

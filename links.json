@@ -1,26 +1,18 @@
 [
   {
-    "href": "/mapel-asj",
-    "title": "Administrasi Sistem Jaringan Kelas 11",
+    "custom": "mapel-asj",
+    "href": "https://drive.google.com/file/d/xyz/view?usp=sharing",
+    "title": "Modul Jaringan Kelas 11",
     "guru": "Pak Budi",
-    "color": "indigo"
+    "color": "indigo",
+    "kategori": "RPL"
   },
   {
-    "href": "/mapel-mtk",
+    "custom": "mapel-mtk",
+    "href": "https://drive.google.com/file/d/abc/view?usp=sharing",
     "title": "Matematika Kelas 12",
     "guru": "Bu Rina",
-    "color": "blue"
-  },
-  {
-    "href": "/mapel-pai",
-    "title": "PAI Kelas 11",
-    "guru": "Ustadzah Siti",
-    "color": "green"
-  },
-  {
-    "href": "/cv",
-    "title": "CV Skahida",
-    "guru": "Admin",
-    "color": "pink"
+    "color": "blue",
+    "kategori": "Umum"
   }
 ]

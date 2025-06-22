@@ -66,7 +66,8 @@
         const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
         const card = document.createElement("a");
 
-        card.href = link.href;
+        // Ubah href ke custom shortlink
+        card.href = `/${link.custom}`;
         card.setAttribute("data-title", link.title);
         card.className = `link-card ${bgColor} border border-gray-200 shadow-sm rounded-lg p-4 flex flex-col items-center text-center transition hover:shadow-md`;
 
@@ -80,7 +81,6 @@
       });
     }
 
-    // Fetch JSON
     fetch("links.json")
       .then((res) => res.json())
       .then((data) => {
@@ -92,11 +92,11 @@
         console.error(err);
       });
 
-    // Search by title
     searchInput.addEventListener("input", function () {
       const keyword = this.value.toLowerCase();
       const filtered = allLinks.filter((link) =>
-        link.title.toLowerCase().includes(keyword)
+        link.title.toLowerCase().includes(keyword) ||
+        link.guru.toLowerCase().includes(keyword)
       );
       renderLinks(filtered);
       notFound.classList.toggle("hidden", filtered.length > 0);
