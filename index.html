@@ -2,167 +2,348 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Skahida Shortlink</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKAHIDA Codeworks | AI Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" />
-
-  <!-- Import Montserrat dari Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
   <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
+   html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'Press Start 2P', monospace;
+    background: #ffffff;
+    color: #1e293b;
+    cursor: url('https://cur.cursors-4u.net/cursors/cur-11/cur1012.cur'), auto;
+    overflow-x: hidden;
+  }
+  .gradient-text {
+    background: linear-gradient(to right, #55E6C1, #38d9a9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .neon-border {
+    border: 2px solid #55E6C1;
+    box-shadow: 0 0 10px rgba(85, 230, 193, 0.4);
+  }
+  .glow {
+    text-shadow: 0 0 5px rgba(85, 230, 193, 0.6);
+  }
+  .card-tilt:hover {
+    transform: scale(1.03) rotateZ(1deg);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  .glow-button {
+    animation: pulse-glow 2s infinite;
+  }
+  @keyframes pulse-glow {
+    0% { box-shadow: 0 0 5px #55E6C1; }
+    50% { box-shadow: 0 0 15px #55E6C1; }
+    100% { box-shadow: 0 0 5px #55E6C1; }
+  }
+  #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: #55E6C1;
+      z-index: 9999;
     }
+  @media (max-width: 768px) {
+    h2 { font-size: 14px !important; }
+  }
   </style>
+  <script>
+    tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+        colors: {
+            primary: '#55E6C1',
+            secondary: '#38bfa1'
+        }
+        }
+    }
+    }
+  </script>
 </head>
-<body class="bg-gradient-to-br from-white via-green-50 to-white text-gray-800 min-h-screen px-4 py-8">
-  <div class="max-w-screen-lg mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-extrabold text-green-700">📚 Skahida Shortlink</h1>
-      <p class="text-sm text-gray-500 mt-2">Akun Resmi Shortlink SMK NU Al Hidayah</p>
-      <p class="text-gray-600 mt-3">Pilih salah satu modul ajar berikut:</p>
-    </div>
+<body class="min-h-screen flex flex-col relative">
+     <!-- Scroll Progress -->
+  <div id="scrollProgress" style="width: 0%"></div>
 
-    <!-- Input Search -->
-    <div class="flex justify-center mb-8">
-      <div class="relative w-full max-w-md">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Cari Modul Ajar..."
-          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-        />
-        <span class="absolute left-3 top-2.5 text-gray-400 text-lg">🔍</span>
+
+  <!-- Musik Latar -->
+  <audio autoplay loop hidden>
+    <source src="https://cdn.pixabay.com/audio/2023/07/20/audio_8812a21306.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating Particles Canvas -->
+  <canvas id="particles" class="absolute inset-0 z-0 pointer-events-none"></canvas>
+
+  <!-- Header -->
+  <header class="p-6 border-b border-primary relative bg-white z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-xl md:text-2xl glow text-primary">SKAHIDA Codeworks</h1>
+      <nav class="hidden md:flex space-x-6 text-secondary font-medium text-xs md:text-sm">
+        <a href="#tentang" class="hover:text-[#2da48e]">Tentang</a>
+        <a href="#proyek" class="hover:text-[#2da48e]">Proyek</a>
+        <a href="#founder" class="hover:text-[#2da48e]">Founder</a>
+        <a href="#kontak" class="hover:text-[#2da48e]">Kontak</a>
+      </nav>
+      <button id="hamburger" class="md:hidden text-primary focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <nav id="mobileNav" class="hidden md:hidden flex-col mt-4 space-y-2 text-center text-secondary font-medium text-sm">
+      <a href="#tentang" class="block py-2">Tentang</a>
+      <a href="#proyek" class="block py-2">Proyek</a>
+      <a href="#founder" class="block py-2">Founder</a>
+      <a href="#kontak" class="block py-2">Kontak</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center text-center px-6 py-24 overflow-hidden">
+    <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+      <source src="video/ai.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
+    <div class="relative z-10 max-w-3xl mx-auto text-white">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6 leading-relaxed gradient-text glow">
+        <span id="scrambleLine1" class="block mb-2"></span>
+        <span id="scrambleLine2"></span>
+      </h2>
+      <p class="text-sm md:text-base text-gray-200 mb-8">Teknologi sebagai jembatan antara pembelajaran dan solusi nyata. Kami membangun masa depan bersama AI & semangat kolaborasi.</p>
+      <a href="#proyek" class="inline-block px-6 py-3 bg-primary text-white font-bold rounded-lg hover:scale-105 glow-button">
+        🚀 Lihat Proyek Kami
+      </a>
+    </div>
+  </section>
+
+  <!-- Tentang -->
+  <section id="tentang" class="py-20 px-6 bg-white" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto">
+      <h3 class="text-xl md:text-2xl mb-4 text-secondary glow">Tentang Kami</h3>
+      <p class="text-sm md:text-base text-gray-700">
+        <strong>SKAHIDA Codeworks</strong> adalah salah satu klub pengembang digital di SMK NU Al Hidayah. Kami berfokus pada pengembangan aplikasi kolaboratif antara siswa dan guru untuk mendukung pendidikan, pelayanan publik, serta solusi teknologi berbasis masyarakat.
+      </p>
+    </div>
+  </section>
+
+  <!-- Proyek -->
+  <section id="proyek" class="py-20 px-6 bg-[#f0fefb]">
+    <div class="max-w-6xl mx-auto">
+      <h3 class="text-xl md:text-2xl mb-10 text-center text-secondary glow">Proyek Unggulan</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <h4 class="text-base mb-2 text-[#2da48e]">Adinda Chatbot</h4>
+          <p class="text-gray-600 text-sm">Asisten digital layanan desa berbasis WhatsApp, hasil karya siswa jurusan RPL.</p>
+        </div>
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <h4 class="text-base mb-2 text-[#2da48e]">E-Raport AI</h4>
+          <p class="text-gray-600 text-sm">Platform penilaian pintar yang membantu guru menganalisis dan menilai siswa dengan teknologi.</p>
+        </div>
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <h4 class="text-base mb-2 text-[#2da48e]">Website MA NU Al Hidayah</h4>
+          <p class="text-gray-600 text-sm">Portal resmi madrasah dengan fitur berita, agenda, presensi, dan komentar dinamis.</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Container Kelas -->
-    <div id="kelasContainer" class="space-y-12 transition-all duration-300">
-      <!-- Akan diisi oleh JavaScript -->
+  <!-- Founder -->
+  <section id="founder" class="py-20 px-6 bg-[#fafffd]">
+    <div class="max-w-6xl mx-auto">
+      <h3 class="text-xl md:text-2xl mb-10 text-center text-secondary glow">Orang di Balik SKAHIDA Codeworks</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <img src="https://i.pravatar.cc/100?u=fachri" alt="Fachri" class="mx-auto mb-4 w-24 h-24 rounded-full border-4 border-primary">
+          <h4 class="text-base text-[#2da48e] font-semibold">Fachri Shofiyyuddin Ahmad</h4>
+          <p class="text-xs text-gray-600 mt-2">Founder & Developer</p>
+        </div>
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <img src="https://i.pravatar.cc/100?u=khaerudin" alt="Khaerudin" class="mx-auto mb-4 w-24 h-24 rounded-full border-4 border-primary">
+          <h4 class="text-base text-[#2da48e] font-semibold">Khaerudin</h4>
+          <p class="text-xs text-gray-600 mt-2">Kepala Sekolah</p>
+        </div>
+        <!-- Contributor -->
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <img src="https://i.pravatar.cc/100?u=nurul" alt="Nurul" class="mx-auto mb-4 w-24 h-24 rounded-full border-4 border-primary">
+          <h4 class="text-base text-[#2da48e] font-semibold">Nurul Hikmah</h4>
+          <p class="text-xs text-gray-600 mt-2">Contributor & Marketing</p>
+        </div>
+        <!-- Student Team -->
+        <div class="p-6 rounded-lg bg-white neon-border card-tilt">
+          <img src="https://i.pravatar.cc/100?u=nurul" alt="Nurul" class="mx-auto mb-4 w-24 h-24 rounded-full border-4 border-primary">
+          <h4 class="text-base text-[#2da48e] font-semibold">Student Crew</h4>
+          <p class="text-xs text-gray-600 mt-2">Student Crew</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Not Found -->
-    <div id="notFound" class="text-center text-gray-500 mt-10 hidden">
-      <p class="text-xl">😕 Modul tidak ditemukan</p>
-      <p class="text-sm mt-1">Coba kata kunci lain ya!</p>
-    </div>
-
-    <!-- Footer -->
-    <div class="mt-16 text-center text-xs text-gray-400">
-      <p>&copy; 2025 <a href="https://skahida.github.io" class="underline hover:text-green-600">skahida.github.io</a> — Dikelola oleh <span class="text-green-700">Skahida Codeworks</span></p>
+<!-- Testimoni -->
+<section class="py-20 px-6 bg-[#f0fff9]" data-aos="fade-up">
+  <div class="max-w-4xl mx-auto text-center">
+    <h3 class="text-xl md:text-2xl mb-10 text-secondary glow">Apa Kata Mereka?</h3>
+    <div class="bg-white p-6 rounded-lg neon-border shadow-lg max-w-xl mx-auto">
+      <p class="text-gray-700 italic text-sm md:text-base">"Bergabung dengan SKAHIDA Codeworks membuat saya bisa mengembangkan proyek nyata, bukan hanya teori. Seru dan menantang!"</p>
+      <p class="mt-4 text-[#2da48e] text-xs">— Azzam, Anggota RPL</p>
     </div>
   </div>
+</section>
 
-  <!-- Script JS -->
+<!-- Partner -->
+<section class="py-16 px-6 bg-white" data-aos="zoom-in">
+  <div class="max-w-6xl mx-auto text-center">
+    <h3 class="text-xl md:text-2xl mb-8 text-secondary glow">Didukung Oleh</h3>
+    <div class="flex flex-wrap justify-center items-center gap-6 grayscale hover:grayscale-0 transition-all">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Undip_Logo.svg/120px-Undip_Logo.svg.png" class="h-12" alt="Undip" />
+      <img src="https://seeklogo.com/images/B/bootstrap-logo-3C30FB2A16-seeklogo.com.png" class="h-12" alt="Bootstrap" />
+      <img src="https://seeklogo.com/images/T/tailwind-css-logo-5AD4175897-seeklogo.com.png" class="h-12" alt="TailwindCSS" />
+    </div>
+  </div>
+</section>
+
+<!-- Form Join -->
+<section class="py-20 px-6 bg-[#f0fefb]" data-aos="fade-up">
+  <div class="max-w-md mx-auto text-center">
+    <h3 class="text-xl md:text-2xl mb-6 text-secondary glow">Gabung Sebagai Student Crew</h3>
+    <form class="space-y-4">
+      <input type="text" placeholder="Nama Lengkap" class="w-full px-4 py-2 border rounded-md text-sm" required />
+      <input type="email" placeholder="Email" class="w-full px-4 py-2 border rounded-md text-sm" required />
+      <textarea placeholder="Kenapa kamu ingin bergabung?" class="w-full px-4 py-2 border rounded-md text-sm" required></textarea>
+      <button type="submit" class="bg-primary text-white px-6 py-2 rounded-md hover:opacity-90">Kirim</button>
+    </form>
+  </div>
+</section>
+
+
+
+
+ <!-- Kontak -->
+<section id="kontak" class="py-20 px-6 bg-white">
+  <div class="max-w-2xl mx-auto text-center">
+    <h3 class="text-xl md:text-2xl mb-4 text-secondary glow">Hubungi Kami</h3>
+    <p class="text-gray-600 mb-6 text-sm">Ingin berkolaborasi atau belajar bersama kami? Hubungi kami melalui:</p>
+    
+    <div class="space-y-3 text-sm text-left inline-block">
+      <p class="flex items-center gap-2 justify-center">
+        <span class="material-symbols-outlined text-[#2da48e]">mail</span>
+        <a href="mailto:codeworks.skahida@gmail.com" class="text-[#2da48e] underline hover:text-[#26967d]">
+          codeworks.skahida@gmail.com
+        </a>
+      </p>
+      <p class="flex items-center gap-2 justify-center">
+        <span class="material-symbols-outlined text-[#2da48e]">chat</span>
+        <a href="https://wa.me/6281234567890" target="_blank" class="text-[#2da48e] underline hover:text-[#26967d]">
+          +62 812-3456-7890
+        </a>
+      </p>
+      <p class="flex items-center gap-2 justify-center">
+        <span class="material-symbols-outlined text-[#2da48e]">photo_camera</span>
+        <a href="https://instagram.com/codeworks.skahida" target="_blank" class="text-[#2da48e] underline hover:text-[#26967d]">
+          @codeworks.skahida
+        </a>
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <!-- Footer -->
+  <footer class="text-center py-6 bg-[#e1fff6] border-t border-primary text-gray-600 text-xs">
+    &copy; 2025 SKAHIDA Codeworks. All rights reserved.
+  </footer>
+
+  <!-- Scramble Text -->
   <script>
-    const searchInput = document.getElementById("searchInput");
-    const kelasContainer = document.getElementById("kelasContainer");
-    const notFound = document.getElementById("notFound");
-
-    const colorMap = {
-      indigo: ["bg-green-50", "text-green-700"], // warna hijau menggantikan indigo
-      blue: ["bg-blue-50", "text-blue-700"],
-      green: ["bg-green-50", "text-green-700"],
-      pink: ["bg-pink-50", "text-pink-700"],
-      red: ["bg-red-50", "text-red-700"],
-      yellow: ["bg-yellow-50", "text-yellow-700"],
-      gray: ["bg-gray-50", "text-gray-700"]
-    };
-
-    let allLinks = [];
-
-    function renderGroupedLinks(data) {
-      kelasContainer.innerHTML = "";
-
-      const grouped = data.reduce((acc, item) => {
-        (acc[item.kelas] = acc[item.kelas] || []).push(item);
-        return acc;
-      }, {});
-
-      const sortedKelas = Object.keys(grouped).sort();
-
-      sortedKelas.forEach(kelas => {
-        const section = document.createElement("div");
-
-        const title = document.createElement("h2");
-        title.className = "text-xl font-bold text-gray-700 mb-4 border-b pb-1";
-        title.textContent = `🧾 Kelas ${kelas}`;
-
-        const grid = document.createElement("div");
-        grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5";
-
-        grouped[kelas].forEach(link => {
-  const [bgColor, textColor] = colorMap[link.color] || ["bg-gray-100", "text-gray-800"];
-  const card = document.createElement("div");
-
-  card.className = `
-    ${bgColor} border border-gray-200 shadow-sm rounded-xl p-4 
-    flex flex-col items-center text-center transition-all duration-200 
-    hover:shadow-lg hover:scale-105 cursor-pointer
-  `;
-
-  const fullLink = window.location.origin + '/' + link.custom;
-
-  card.innerHTML = `
-    <div class="text-3xl mb-2">📘</div>
-    <div class="font-semibold text-sm ${textColor} leading-tight text-center line-clamp-2">${link.title}</div>
-    <div class="text-xs text-gray-500 mt-2 mb-3">👤 ${link.guru}</div>
-    <button class="copy-btn bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded-full transition">
-      📋 Salin
-    </button>
-    <div class="copy-msg hidden mt-1 text-green-600 text-xs font-medium">✅ Tersalin!</div>
-  `;
-
-  // Klik copy button (tidak redirect)
-  const button = card.querySelector(".copy-btn");
-  const msg = card.querySelector(".copy-msg");
-
-  button.addEventListener("click", () => {
-    navigator.clipboard.writeText(fullLink).then(() => {
-      msg.classList.remove("hidden");
-      setTimeout(() => msg.classList.add("hidden"), 2000);
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (scrollTop / docHeight) * 100;
+      document.getElementById('scrollProgress').style.width = scrolled + '%';
     });
-  });
 
-  // Klik card redirect (kecuali klik tombol salin)
-  card.addEventListener("click", (e) => {
-    if (e.target.closest(".copy-btn")) return; // jangan redirect kalau klik tombol salin
-    window.open(fullLink, "_blank");
-  });
+    function runScramble(id, text, delay = 50) {
+      const el = document.getElementById(id);
+      const chars = "!<>-_\\/[]{}—=+*^?#________";
+      let frame = 0, queue = [];
 
-  grid.appendChild(card);
-});
+      for (let i = 0; i < text.length; i++) {
+        const from = Math.floor(Math.random() * 20);
+        const to = from + Math.floor(Math.random() * 40) + 10;
+        queue.push({ from, to, char: text[i] });
+      }
 
-        section.appendChild(title);
-        section.appendChild(grid);
-        kelasContainer.appendChild(section);
-      });
+      function scramble() {
+        let output = "", complete = 0;
+        for (let i = 0; i < queue.length; i++) {
+          const { from, to, char } = queue[i];
+          output += frame >= to ? char : frame >= from ? `<span style="color:#55E6C1">${chars[Math.floor(Math.random()*chars.length)]}</span>` : " ";
+          if (frame >= to) complete++;
+        }
+        el.innerHTML = output;
+        if (complete === queue.length) return;
+        frame++; setTimeout(scramble, delay);
+      }
+
+      scramble();
     }
 
-    // Ambil data JSON
-    fetch("links.json")
-      .then(res => res.json())
-      .then(data => {
-        allLinks = data;
-        renderGroupedLinks(allLinks);
-      })
-      .catch(err => {
-        kelasContainer.innerHTML = '<p class="text-sm text-red-500 text-center">Gagal memuat link.</p>';
-        console.error(err);
-      });
-
-    // Fitur Pencarian
-    searchInput.addEventListener("input", function () {
-      const keyword = this.value.toLowerCase();
-      const filtered = allLinks.filter(link =>
-        link.title.toLowerCase().includes(keyword) ||
-        link.guru.toLowerCase().includes(keyword)
-      );
-      renderGroupedLinks(filtered);
-      notFound.classList.toggle("hidden", filtered.length > 0);
-    });
+    runScramble("scrambleLine1", "Coding with Purpose");
+    setTimeout(() => runScramble("scrambleLine2", "Creating with Passion"), 1000);
   </script>
+
+  <!-- Hamburger Toggle -->
+  <script>
+    document.getElementById("hamburger").onclick = () => {
+      document.getElementById("mobileNav").classList.toggle("hidden");
+    };
+  </script>
+
+  <!-- Particles Canvas -->
+  <script>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = Array.from({length: 50}, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: Math.random() * 0.5 - 0.25,
+      dy: Math.random() * 0.5 - 0.25
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = '#55E6C1';
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init();</script>
+
 </body>
 </html>
